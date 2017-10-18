@@ -25,7 +25,6 @@ import co.cask.cdap.common.NamespaceCannotBeCreatedException;
 import co.cask.cdap.common.NamespaceCannotBeDeletedException;
 import co.cask.cdap.common.NamespaceNotFoundException;
 import co.cask.cdap.common.conf.CConfiguration;
-import co.cask.cdap.common.conf.Constants;
 import co.cask.cdap.common.namespace.NamespaceAdmin;
 import co.cask.cdap.common.security.AuthEnforce;
 import co.cask.cdap.data2.dataset2.DatasetFramework;
@@ -49,14 +48,12 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.hadoop.security.authentication.util.KerberosName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,28 +143,7 @@ public final class DefaultNamespaceAdmin implements NamespaceAdmin {
       validateCustomMapping(metadata);
     }
 
-    // check that the user has configured either both of none of the following configuration: principal and keytab URI
-    boolean hasValidKerberosConf = false;
-    if (metadata.getConfig() != null) {
-      String configuredPrincipal = metadata.getConfig().getPrincipal();
-      String configuredKeytabURI = metadata.getConfig().getKeytabURI();
-      if ((!Strings.isNullOrEmpty(configuredPrincipal) && Strings.isNullOrEmpty(configuredKeytabURI)) ||
-        (Strings.isNullOrEmpty(configuredPrincipal) && !Strings.isNullOrEmpty(configuredKeytabURI))) {
-        throw new BadRequestException(
-          String.format("Either neither or both of the following two configurations must be configured. " +
-                          "Configured principal: %s, Configured keytabURI: %s",
-                        configuredPrincipal, configuredKeytabURI));
-      }
-      hasValidKerberosConf = true;
-    }
-
-    // check that if explore as principal is explicitly set to false then user has kerberos configuration
-    if (!metadata.getConfig().isExploreAsPrincipal() && !hasValidKerberosConf) {
-      throw new BadRequestException(
-        String.format("No kerberos principal or keytab-uri was provided while '%s' was set to true.",
-                      NamespaceConfig.EXPLORE_AS_PRINCIPAL));
-
-    }
+    validateKerberosConfig(metadata);
 
     // store the meta first in the namespace store because namespacedLocationFactory needs to look up location
     // mapping from namespace config
@@ -229,6 +205,31 @@ public final class DefaultNamespaceAdmin implements NamespaceAdmin {
                                                                   existingConfig.getRootDirectory()));
         }
       }
+    }
+  }
+
+  private void validateKerberosConfig(NamespaceMeta metadata) throws BadRequestException {
+    // check that the user has configured either both of none of the following configuration: principal and keytab URI
+    boolean hasValidKerberosConf = false;
+    if (metadata.getConfig() != null) {
+      String configuredPrincipal = metadata.getConfig().getPrincipal();
+      String configuredKeytabURI = metadata.getConfig().getKeytabURI();
+      if ((!Strings.isNullOrEmpty(configuredPrincipal) && Strings.isNullOrEmpty(configuredKeytabURI)) ||
+        (Strings.isNullOrEmpty(configuredPrincipal) && !Strings.isNullOrEmpty(configuredKeytabURI))) {
+        throw new BadRequestException(
+          String.format("Either neither or both of the following two configurations must be configured. " +
+                          "Configured principal: %s, Configured keytabURI: %s",
+                        configuredPrincipal, configuredKeytabURI));
+      }
+      hasValidKerberosConf = true;
+    }
+
+    // check that if explore as principal is explicitly set to false then user has kerberos configuration
+    if (!metadata.getConfig().isExploreAsPrincipal() && !hasValidKerberosConf) {
+      throw new BadRequestException(
+        String.format("No kerberos principal or keytab-uri was provided while '%s' was set to true.",
+                      NamespaceConfig.EXPLORE_AS_PRINCIPAL));
+
     }
   }
 
@@ -341,6 +342,22 @@ public final class DefaultNamespaceAdmin implements NamespaceAdmin {
       builder.setSchedulerQueueName(config.getSchedulerQueueName());
     }
 
+    if (config != null && config.getKeytabURI() != null) {
+      String keytabURI = config.getKeytabURI();
+      if (keytabURI.isEmpty()) {
+        throw new BadRequestException("Cannot update keytab URI with the empty URI.");
+      }
+      if (keytabURI.equals(existingMeta.getConfig().getKeytabURI())) {
+        // The given keytab URI is the same as the existing one, but the content of the keytab file might be changed.
+        // Increment the keytab URI version so that the cache will reload content in the updated keytab file.
+        builder.incrementKeytabURIVersion();
+      } else {
+        builder.setKeytabURI(keytabURI);
+        // clear keytab URI version
+        builder.setKeytabURIVersion(0);
+      }
+    }
+
     if (config != null) {
       builder.setExploreAsPrincipal(config.isExploreAsPrincipal());
     }
@@ -351,6 +368,8 @@ public final class DefaultNamespaceAdmin implements NamespaceAdmin {
                                                     "is created.", difference, namespaceId));
     }
     NamespaceMeta updatedMeta = builder.build();
+    // check whether the updated namespace meta still has valid Kerberos configuration
+    validateKerberosConfig(updatedMeta);
     nsStore.update(updatedMeta);
     // refresh the cache with new meta
     namespaceMetaCache.refresh(namespaceId);

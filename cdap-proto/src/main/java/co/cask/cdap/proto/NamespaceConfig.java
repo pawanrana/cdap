@@ -52,19 +52,21 @@ public class NamespaceConfig {
   private final String principal;
   private final String groupName;
   private final String keytabURI;
+  @Nullable
+  private final Integer keytabURIVersion;
 
   // scheduler queue name is kept non nullable unlike others like root directory, hbase namespace etc for backward
   // compatibility
   public NamespaceConfig(String schedulerQueueName, @Nullable String rootDirectory,
                          @Nullable String hbaseNamespace, @Nullable String hiveDatabase,
                          @Nullable String principal, @Nullable String groupName, @Nullable String keytabURI) {
-    this(schedulerQueueName, rootDirectory, hbaseNamespace, hiveDatabase, principal, groupName, keytabURI, true);
+    this(schedulerQueueName, rootDirectory, hbaseNamespace, hiveDatabase, principal, groupName, keytabURI, null, true);
   }
 
   public NamespaceConfig(String schedulerQueueName, @Nullable String rootDirectory,
                          @Nullable String hbaseNamespace, @Nullable String hiveDatabase,
                          @Nullable String principal, @Nullable String groupName, @Nullable String keytabURI,
-                         boolean exploreAsPrincipal) {
+                         @Nullable Integer keytabURIVersion, boolean exploreAsPrincipal) {
     this.schedulerQueueName = schedulerQueueName;
     this.rootDirectory = rootDirectory;
     this.hbaseNamespace = hbaseNamespace;
@@ -72,6 +74,7 @@ public class NamespaceConfig {
     this.principal = principal;
     this.groupName = groupName;
     this.keytabURI = keytabURI;
+    this.keytabURIVersion = keytabURIVersion;
     this.exploreAsPrincipal = exploreAsPrincipal;
   }
 
@@ -108,6 +111,11 @@ public class NamespaceConfig {
     return keytabURI;
   }
 
+  @Nullable
+  public Integer getKeytabURIVersion() {
+    return keytabURIVersion;
+  }
+
   public Boolean isExploreAsPrincipal() {
     return exploreAsPrincipal == null || exploreAsPrincipal;
   }
@@ -139,9 +147,6 @@ public class NamespaceConfig {
       difference.add("groupName");
     }
 
-    if (!Objects.equals(this.keytabURI, other.keytabURI)) {
-      difference.add("keytabURI");
-    }
     return difference;
   }
 
@@ -161,6 +166,7 @@ public class NamespaceConfig {
       Objects.equals(principal, other.principal) &&
       Objects.equals(groupName, other.groupName) &&
       Objects.equals(keytabURI, other.keytabURI) &&
+      Objects.equals(keytabURIVersion, other.keytabURIVersion) &&
       Objects.equals(exploreAsPrincipal, other.exploreAsPrincipal);
   }
 
@@ -168,7 +174,7 @@ public class NamespaceConfig {
   public int hashCode() {
     return Objects.hash(
       schedulerQueueName, rootDirectory, hbaseNamespace, hiveDatabase, principal, groupName, keytabURI,
-      exploreAsPrincipal);
+      keytabURIVersion, exploreAsPrincipal);
   }
 
   @Override
@@ -181,6 +187,7 @@ public class NamespaceConfig {
       ", principal='" + principal + '\'' +
       ", groupName='" + groupName + '\'' +
       ", keytabURI='" + keytabURI + '\'' +
+      ", keytabURIVersion='" + keytabURIVersion + '\'' +
       ", exploreAsPrincipal='" + exploreAsPrincipal + '\'' +
       '}';
   }

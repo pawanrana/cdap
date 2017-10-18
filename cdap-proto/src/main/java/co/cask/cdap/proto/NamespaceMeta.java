@@ -63,6 +63,7 @@ public final class NamespaceMeta {
     private String principal;
     private String groupName;
     private String keytabURI;
+    private Integer keytabURIVersion;
     private boolean exploreAsPrincipal = true;
 
     public Builder() {
@@ -81,6 +82,7 @@ public final class NamespaceMeta {
         this.principal = config.getPrincipal();
         this.groupName = config.getGroupName();
         this.keytabURI = config.getKeytabURI();
+        this.keytabURIVersion = config.getKeytabURIVersion();
         this.exploreAsPrincipal = config.isExploreAsPrincipal();
       }
     }
@@ -140,6 +142,16 @@ public final class NamespaceMeta {
       return this;
     }
 
+    public Builder incrementKeytabURIVersion() {
+      // Initialize the keytab URI version to 1 if it is null, otherwise increment the existing version by 1
+      keytabURIVersion = keytabURIVersion == null ? 1 : keytabURIVersion + 1;
+      return this;
+    }
+
+    public void setKeytabURIVersion(Integer keytabURIVersion) {
+      this.keytabURIVersion = keytabURIVersion;
+    }
+
     public Builder setExploreAsPrincipal(boolean exploreAsPrincipal) {
       this.exploreAsPrincipal = exploreAsPrincipal;
       return this;
@@ -162,7 +174,7 @@ public final class NamespaceMeta {
       return new NamespaceMeta(name, description, new NamespaceConfig(schedulerQueueName, rootDirectory,
                                                                       hbaseNamespace, hiveDatabase,
                                                                       principal, groupName, keytabURI,
-                                                                      exploreAsPrincipal));
+                                                                      keytabURIVersion, exploreAsPrincipal));
     }
   }
 

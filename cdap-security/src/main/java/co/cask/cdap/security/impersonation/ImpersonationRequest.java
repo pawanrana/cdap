@@ -30,6 +30,8 @@ public class ImpersonationRequest {
   private final ImpersonatedOpType impersonatedOpType;
   private final String principal;
   private final String keytabURI;
+  @Nullable
+  private final Integer keytabURIVersion;
 
   // used when we do not know what is the principal for the entity id
   public ImpersonationRequest(NamespacedEntityId entityId, ImpersonatedOpType impersonatedOpType) {
@@ -38,16 +40,17 @@ public class ImpersonationRequest {
 
   // principal is needed for RemoteUGIProvider to make query to master but we should not pass the key tab uri
   public ImpersonationRequest(NamespacedEntityId entityId, ImpersonatedOpType impersonatedOpType, String principal) {
-    this(entityId, impersonatedOpType, principal, null);
+    this(entityId, impersonatedOpType, principal, null, null);
   }
 
   // principal and keytabURI is needed for master side to look up the key tab file.
   public ImpersonationRequest(NamespacedEntityId entityId, ImpersonatedOpType impersonatedOpType, String principal,
-                              String keytabURI) {
+                              String keytabURI, @Nullable Integer keytabURIVersion) {
     this.principal = principal;
     this.entityId = entityId;
     this.impersonatedOpType = impersonatedOpType;
     this.keytabURI = keytabURI;
+    this.keytabURIVersion = keytabURIVersion;
   }
 
   public NamespacedEntityId getEntityId() {
@@ -68,6 +71,11 @@ public class ImpersonationRequest {
     return keytabURI;
   }
 
+  @Nullable
+  public Integer getKeytabURIVersion() {
+    return keytabURIVersion;
+  }
+
   @Override
   public String toString() {
     return "ImpersonationRequest{" +
@@ -75,6 +83,7 @@ public class ImpersonationRequest {
       ", impersonatedOpType=" + impersonatedOpType +
       ", principal=" + principal +
       ", keytabURI=" + keytabURI +
+      ", keytabURIVersion=" + keytabURIVersion +
       '}';
   }
 
@@ -90,11 +99,12 @@ public class ImpersonationRequest {
     return Objects.equals(entityId, that.entityId) &&
       impersonatedOpType == that.impersonatedOpType &&
       Objects.equals(principal, that.principal) &&
-      Objects.equals(keytabURI, that.keytabURI);
+      Objects.equals(keytabURI, that.keytabURI) &&
+      Objects.equals(keytabURIVersion, that.keytabURIVersion);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entityId, impersonatedOpType, principal, keytabURI);
+    return Objects.hash(entityId, impersonatedOpType, principal, keytabURI, keytabURIVersion);
   }
 }

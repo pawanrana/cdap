@@ -73,7 +73,8 @@ public abstract class AbstractCachedUGIProvider implements UGIProvider {
       ImpersonationInfo info = getPrincipalForEntity(impersonationRequest);
       ImpersonationRequest newRequest = new ImpersonationRequest(impersonationRequest.getEntityId(),
                                                                  impersonationRequest.getImpersonatedOpType(),
-                                                                 info.getPrincipal(), info.getKeytabURI());
+                                                                 info.getPrincipal(), info.getKeytabURI(),
+                                                                 info.getKeytabURIVersion());
       return isCache ? ugiCache.get(new UGICacheKey(newRequest)) : createUGI(newRequest);
     } catch (ExecutionException e) {
       Throwable cause = e.getCause();
@@ -129,12 +130,14 @@ public abstract class AbstractCachedUGIProvider implements UGIProvider {
         return false;
       }
       UGICacheKey cachekey = (UGICacheKey) o;
-      return Objects.equals(request.getPrincipal(), cachekey.getRequest().getPrincipal());
+      return Objects.equals(request.getPrincipal(), cachekey.getRequest().getPrincipal()) &&
+        Objects.equals(request.getKeytabURI(), cachekey.getRequest().getKeytabURI()) &&
+        Objects.equals(request.getKeytabURIVersion(), cachekey.getRequest().getKeytabURIVersion());
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(request.getPrincipal());
+      return Objects.hash(request.getPrincipal(), request.getKeytabURI(), request.getKeytabURIVersion());
     }
   }
 }

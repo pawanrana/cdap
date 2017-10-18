@@ -78,7 +78,8 @@ public class DefaultOwnerAdmin implements OwnerAdmin {
     // (CDAP-8176) Since no owner was found for the entity return namespace principal if present.
     NamespaceConfig nsConfig = getNamespaceConfig(entityId.getNamespaceId());
     return nsConfig.getPrincipal() == null ? null : new ImpersonationInfo(nsConfig.getPrincipal(),
-                                                                          nsConfig.getKeytabURI());
+                                                                          nsConfig.getKeytabURI(),
+                                                                          nsConfig.getKeytabURIVersion());
   }
 
   @Nullable

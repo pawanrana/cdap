@@ -19,6 +19,7 @@ package co.cask.cdap.security.impersonation;
 import com.google.common.base.Strings;
 
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 /**
  * Encapsulates information necessary to impersonate a user - principal and keytab path.
@@ -26,11 +27,20 @@ import java.util.Objects;
 public final class ImpersonationInfo {
   private final String principal;
   private final String keytabURI;
+  @Nullable
+  private final Integer keytabURIVersion;
 
   /**
    * Creates {@link ImpersonationInfo} using the specified principal and keytab path.
    */
   public ImpersonationInfo(String principal, String keytabURI) {
+    this(principal, keytabURI, null);
+  }
+
+  /**
+   * Creates {@link ImpersonationInfo} using the specified principal, keytab path and keytab file version.
+   */
+  public ImpersonationInfo(String principal, String keytabURI, @Nullable Integer keytabURIVersion) {
     if (Strings.isNullOrEmpty(principal)) {
       throw new IllegalArgumentException("A principal must be provided");
     }
@@ -39,6 +49,7 @@ public final class ImpersonationInfo {
     }
     this.principal = principal;
     this.keytabURI = keytabURI;
+    this.keytabURIVersion = keytabURIVersion;
   }
 
   public String getPrincipal() {
@@ -49,11 +60,17 @@ public final class ImpersonationInfo {
     return keytabURI;
   }
 
+  @Nullable
+  public Integer getKeytabURIVersion() {
+    return keytabURIVersion;
+  }
+
   @Override
   public String toString() {
     return "ImpersonationInfo{" +
       "principal='" + principal + '\'' +
       ", keytabURI='" + keytabURI + '\'' +
+      ", keytabURIVersion='" + keytabURIVersion + '\'' +
       '}';
   }
 
@@ -66,11 +83,13 @@ public final class ImpersonationInfo {
       return false;
     }
     ImpersonationInfo that = (ImpersonationInfo) o;
-    return Objects.equals(principal, that.principal) && Objects.equals(keytabURI, that.keytabURI);
+    return Objects.equals(principal, that.principal) &&
+      Objects.equals(keytabURI, that.keytabURI) &&
+      Objects.equals(keytabURIVersion, that.keytabURIVersion);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(principal, keytabURI);
+    return Objects.hash(principal, keytabURI, keytabURIVersion);
   }
 }
