@@ -445,8 +445,10 @@ public class NamespaceHttpHandlerTest extends AppFabricTestBase {
     config = GSON.fromJson(namespace.get(CONFIG_FIELD).getAsJsonObject(), NamespaceConfig.class);
     Assert.assertEquals("prod", config.getSchedulerQueueName());
 
+    // verify updating keytab URI with version initialized as 0
     verifyUpdateKeytabURI(impNsMeta, "new/url", 0);
     verifyUpdateKeytabURI(impNsMeta, "new/url/updated", 0);
+    // verify that keytab URI version keeps incrementing if the given keytab URI is the same as the existing one
     verifyUpdateKeytabURI(impNsMeta, "new/url/updated", 1);
     verifyUpdateKeytabURI(impNsMeta, "new/url/updated", 2);
     // cleanup
@@ -463,6 +465,5 @@ public class NamespaceHttpHandlerTest extends AppFabricTestBase {
     // verify that the uri has changed
     Assert.assertEquals(uri, config.getKeytabURI());
     Assert.assertEquals(uriVersion, config.getKeytabURIVersion());
-    Assert.assertEquals(NAME, namespace.get(NAME_FIELD).getAsString());
   }
 }
