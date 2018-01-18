@@ -19,6 +19,8 @@ import {renderGraph} from 'components/OpsDashboard/RunsGraph/graphRenderer';
 
 import DATA from './data';
 
+require('./RunsGraph.scss');
+
 export default class ClassName extends Component {
   state = {
     data: []
@@ -46,8 +48,8 @@ export default class ClassName extends Component {
   }
 
   componentDidMount() {
-    let width = 1500,
-        height = 750;
+    let width = 1100,
+        height = 400;
     renderGraph('#runs-graph', width, height, this.state.data);
   }
 
