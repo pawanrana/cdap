@@ -16,6 +16,7 @@
 
 package co.cask.cdap.metadata;
 
+import co.cask.cdap.api.metadata.MetadataEntity;
 import co.cask.cdap.common.InvalidMetadataException;
 import co.cask.cdap.common.NotFoundException;
 import co.cask.cdap.common.conf.CConfiguration;
@@ -91,6 +92,12 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public void addProperties(MetadataEntity metadataEntity, Map<String, String> properties) throws NotFoundException,
+    InvalidMetadataException {
+    //TODO: Rohit
+  }
+
+  @Override
   public void addTags(NamespacedEntityId namespacedEntityId, String... tags)
     throws NotFoundException, InvalidMetadataException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
@@ -99,9 +106,21 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public void addTags(MetadataEntity metadataEntity, String... tags) throws NotFoundException,
+    InvalidMetadataException {
+    //TODO: Rohit
+  }
+
+  @Override
   public Set<MetadataRecord> getMetadata(NamespacedEntityId namespacedEntityId) throws NotFoundException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
     return metadataStore.getMetadata(namespacedEntityId);
+  }
+
+  @Override
+  public Set<MetadataRecord> getMetadata(MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+    return null;
   }
 
   @Override
@@ -112,9 +131,21 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public Set<MetadataRecord> getMetadata(MetadataScope scope, MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+    return null;
+  }
+
+  @Override
   public Map<String, String> getProperties(NamespacedEntityId namespacedEntityId) throws NotFoundException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
     return metadataStore.getProperties(namespacedEntityId);
+  }
+
+  @Override
+  public Map<String, String> getProperties(MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+    return null;
   }
 
   @Override
@@ -125,9 +156,22 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public Map<String, String> getProperties(MetadataScope scope, MetadataEntity metadataEntity)
+    throws NotFoundException {
+    //TODO: Rohit
+    return null;
+  }
+
+  @Override
   public Set<String> getTags(NamespacedEntityId namespacedEntityId) throws NotFoundException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
     return metadataStore.getTags(namespacedEntityId);
+  }
+
+  @Override
+  public Set<String> getTags(MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+    return null;
   }
 
   @Override
@@ -137,9 +181,20 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public Set<String> getTags(MetadataScope scope, MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+    return null;
+  }
+
+  @Override
   public void removeMetadata(NamespacedEntityId namespacedEntityId) throws NotFoundException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
     metadataStore.removeMetadata(MetadataScope.USER, namespacedEntityId);
+  }
+
+  @Override
+  public void removeMetadata(MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
   }
 
   @Override
@@ -149,9 +204,19 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public void removeProperties(MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+  }
+
+  @Override
   public void removeProperties(NamespacedEntityId namespacedEntityId, String... keys) throws NotFoundException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
     metadataStore.removeProperties(MetadataScope.USER, namespacedEntityId, keys);
+  }
+
+  @Override
+  public void removeProperties(MetadataEntity metadataEntity, String... keys) throws NotFoundException {
+    //TODO: Rohit
   }
 
   @Override
@@ -161,9 +226,19 @@ public class DefaultMetadataAdmin implements MetadataAdmin {
   }
 
   @Override
+  public void removeTags(MetadataEntity metadataEntity) throws NotFoundException {
+    //TODO: Rohit
+  }
+
+  @Override
   public void removeTags(NamespacedEntityId namespacedEntityId, String... tags) throws NotFoundException {
     entityExistenceVerifier.ensureExists(namespacedEntityId);
     metadataStore.removeTags(MetadataScope.USER, namespacedEntityId, tags);
+  }
+
+  @Override
+  public void removeTags(MetadataEntity metadataEntity, String... tags) throws NotFoundException {
+    //TODO: Rohit
   }
 
   @Override

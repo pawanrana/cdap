@@ -16,6 +16,7 @@
 
 package co.cask.cdap.metadata;
 
+import co.cask.cdap.api.metadata.MetadataEntity;
 import co.cask.cdap.common.InvalidMetadataException;
 import co.cask.cdap.common.NotFoundException;
 import co.cask.cdap.common.metadata.MetadataRecord;
@@ -46,7 +47,11 @@ public interface MetadataAdmin {
    * @throws NotFoundException if the specified entity was not found
    * @throws InvalidMetadataException if some of the properties violate metadata validation rules
    */
+  @Deprecated
   void addProperties(NamespacedEntityId namespacedEntityId, Map<String, String> properties)
+    throws NotFoundException, InvalidMetadataException;
+
+  void addProperties(MetadataEntity metadataEntity, Map<String, String> properties)
     throws NotFoundException, InvalidMetadataException;
 
   /**
@@ -56,7 +61,11 @@ public interface MetadataAdmin {
    * @throws NotFoundException if the specified entity was not found
    * @throws InvalidMetadataException if some of the properties violate metadata validation rules
    */
+  @Deprecated
   void addTags(NamespacedEntityId namespacedEntityId, String... tags)
+    throws NotFoundException, InvalidMetadataException;
+
+  void addTags(MetadataEntity metadataEntity, String... tags)
     throws NotFoundException, InvalidMetadataException;
 
   /**
@@ -65,7 +74,10 @@ public interface MetadataAdmin {
    *
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   Set<MetadataRecord> getMetadata(NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  Set<MetadataRecord> getMetadata(MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * Returns a set of {@link MetadataRecord} representing all metadata (including properties and tags) for the specified
@@ -74,7 +86,10 @@ public interface MetadataAdmin {
    * @throws NotFoundException if the specified entity was not found
    */
   // TODO: Should this return a single metadata record instead or is a set of one record ok?
+  @Deprecated
   Set<MetadataRecord> getMetadata(MetadataScope scope, NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  Set<MetadataRecord> getMetadata(MetadataScope scope, MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * @return a {@link Map} representing the metadata of the specified {@link NamespacedEntityId} in both
@@ -82,14 +97,21 @@ public interface MetadataAdmin {
    * @throws NotFoundException if the specified entity was not found
    */
   // TODO: This should perhaps return a Map<MetadataScope, Map<String, String>>
+  @Deprecated
   Map<String, String> getProperties(NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  Map<String, String> getProperties(MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * @return a {@link Map} representing the metadata of the specified {@link NamespacedEntityId} in the specified
    * {@link MetadataScope}
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   Map<String, String> getProperties(MetadataScope scope, NamespacedEntityId namespacedEntityId)
+    throws NotFoundException;
+
+  Map<String, String> getProperties(MetadataScope scope, MetadataEntity metadataEntity)
     throws NotFoundException;
 
   /**
@@ -98,13 +120,19 @@ public interface MetadataAdmin {
    * @throws NotFoundException if the specified entity was not found
    */
   // TODO: This should perhaps return a Map<MetadataScope, Set<String>>
+  @Deprecated
   Set<String> getTags(NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  Set<String> getTags(MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * @return all the tags for the specified {@link NamespacedEntityId} in the specified {@link MetadataScope}
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   Set<String> getTags(MetadataScope scope, NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  Set<String> getTags(MetadataScope scope, MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * Removes all the metadata (including properties and tags) for the specified {@link NamespacedEntityId}. This
@@ -113,7 +141,10 @@ public interface MetadataAdmin {
    * @param namespacedEntityId the {@link NamespacedEntityId} to remove metadata for
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   void removeMetadata(NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  void removeMetadata(MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * Removes all properties from the metadata of the specified {@link NamespacedEntityId}. This API only supports
@@ -122,7 +153,10 @@ public interface MetadataAdmin {
    * @param namespacedEntityId the {@link NamespacedEntityId} to remove properties for
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   void removeProperties(NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  void removeProperties(MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * Removes the specified keys from the metadata properties of the specified {@link NamespacedEntityId}. This API only
@@ -132,7 +166,10 @@ public interface MetadataAdmin {
    * @param keys the metadata property keys to remove
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   void removeProperties(NamespacedEntityId namespacedEntityId, String... keys) throws NotFoundException;
+
+  void removeProperties(MetadataEntity metadataEntity, String... keys) throws NotFoundException;
 
   /**
    * Removes all tags from the specified {@link NamespacedEntityId}. This API only supports removing tags in
@@ -141,7 +178,10 @@ public interface MetadataAdmin {
    * @param namespacedEntityId the {@link NamespacedEntityId} to remove tags for
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   void removeTags(NamespacedEntityId namespacedEntityId) throws NotFoundException;
+
+  void removeTags(MetadataEntity metadataEntity) throws NotFoundException;
 
   /**
    * Removes the specified tags from the specified {@link NamespacedEntityId}. This API only supports removing tags in
@@ -151,7 +191,10 @@ public interface MetadataAdmin {
    * @param tags the tags to remove
    * @throws NotFoundException if the specified entity was not found
    */
+  @Deprecated
   void removeTags(NamespacedEntityId namespacedEntityId, String ... tags) throws NotFoundException;
+
+  void removeTags(MetadataEntity metadataEntity, String ... tags) throws NotFoundException;
 
   /**
    * Executes a search for CDAP entities in the specified namespace with the specified search query and
