@@ -14,7 +14,7 @@
  * the License.
 */
 
-import createExperimentStore, {ACTIONS as CREATEEXPERIMENTACTIONS} from 'components/Experiments/store/createExperimentStore';
+import createExperimentStore, {ACTIONS as CREATEEXPERIMENTACTIONS, POPOVER_TYPES} from 'components/Experiments/store/createExperimentStore';
 import experimentDetailStore, {ACTIONS as EXPERIMENTDETAILACTIONS} from 'components/Experiments/store/experimentDetailStore';
 import {myExperimentsApi} from 'api/experiments';
 import {getCurrentNamespace} from 'services/NamespaceStore';
@@ -68,7 +68,7 @@ function setDirectives(directives) {
   });
 }
 
-function setVisiblePopover(popover = 'experiment') {
+function setVisiblePopover(popover = POPOVER_TYPES.EXPERIMENT) {
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_VISIBLE_POPOVER,
     payload: {popover}
@@ -85,7 +85,7 @@ function setExperimentCreated(experimentId) {
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_VISIBLE_POPOVER,
     payload: {
-      popover: 'model'
+      popover: POPOVER_TYPES.MODEL
     }
   });
 }
