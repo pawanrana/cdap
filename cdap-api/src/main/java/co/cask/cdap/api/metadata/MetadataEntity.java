@@ -35,6 +35,7 @@ public class MetadataEntity {
   public static final String PROGRAM_NAME = "program_name";
   public static final String STREAM_VIEW = "view";
   public static final String VERSION = "version";
+  public static final String FIELD = "field";
 
 
   private List<KeyValue<String, String>> details;
