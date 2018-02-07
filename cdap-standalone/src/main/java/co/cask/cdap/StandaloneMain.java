@@ -57,6 +57,8 @@ import co.cask.cdap.gateway.handlers.meta.RemoteSystemOperationsServiceModule;
 import co.cask.cdap.gateway.router.NettyRouter;
 import co.cask.cdap.gateway.router.RouterModules;
 import co.cask.cdap.internal.app.services.AppFabricServer;
+import co.cask.cdap.internal.provision.ProvisionerModule;
+import co.cask.cdap.internal.provision.ProvisioningService;
 import co.cask.cdap.logging.LoggingUtil;
 import co.cask.cdap.logging.appender.LogAppenderInitializer;
 import co.cask.cdap.logging.framework.LogPipelineLoader;
@@ -132,6 +134,7 @@ public class StandaloneMain {
   private final RemoteSystemOperationsService remoteSystemOperationsService;
   private final MessagingService messagingService;
   private final OperationalStatsService operationalStatsService;
+  private final ProvisioningService provisioningService;
 
   private ExternalAuthenticationServer externalAuthenticationServer;
   private ExploreExecutorService exploreExecutorService;
@@ -163,6 +166,7 @@ public class StandaloneMain {
     serviceStore = injector.getInstance(ServiceStore.class);
     streamService = injector.getInstance(StreamService.class);
     operationalStatsService = injector.getInstance(OperationalStatsService.class);
+    provisioningService = injector.getInstance(ProvisioningService.class);
 
     if (cConf.getBoolean(DISABLE_UI, false)) {
       userInterfaceService = null;
@@ -231,6 +235,7 @@ public class StandaloneMain {
     datasetService.startAndWait();
     serviceStore.startAndWait();
     streamService.startAndWait();
+    provisioningService.startAndWait();
 
     // Validate the logging pipeline configuration.
     // Do it explicitly as Standalone doesn't have a separate master check phase as the distributed does.
@@ -307,6 +312,7 @@ public class StandaloneMain {
       }
       exploreClient.close();
       metadataService.stopAndWait();
+      provisioningService.stopAndWait();
       serviceStore.stopAndWait();
       // app fabric will also stop all programs
       appFabricServer.stopAndWait();
@@ -494,7 +500,8 @@ public class StandaloneMain {
       new PreviewHttpModule(),
       new MessagingServerRuntimeModule().getStandaloneModules(),
       new AppFabricServiceRuntimeModule().getStandaloneModules(),
-      new OperationalStatsModule()
+      new OperationalStatsModule(),
+      new ProvisionerModule()
     );
   }
 }

@@ -223,6 +223,7 @@
         <stage.runtime.ext.dir>${stage.opt.dir}/ext/runtimes</stage.runtime.ext.dir>
         <stage.security.ext.dir>${stage.opt.dir}/ext/security</stage.security.ext.dir>
         <stage.operations.ext.dir>${stage.opt.dir}/ext/operations</stage.operations.ext.dir>
+        <stage.provisioners.ext.dir>${stage.opt.dir}/ext/provisioners</stage.provisioners.ext.dir>
         <additional.artifacts.jar.pattern>**/target/*.jar</additional.artifacts.jar.pattern>
         <additional.artifacts.config.pattern>**/target/*.json</additional.artifacts.config.pattern>
         <additional.artifacts.exclude.pattern>**/target/*-tests.jar</additional.artifacts.exclude.pattern>
@@ -262,6 +263,12 @@
         <dependency>
           <groupId>co.cask.cdap</groupId>
           <artifactId>cdap-operational-stats-core</artifactId>
+          <version>${project.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>co.cask.cdap</groupId>
+          <artifactId>cdap-provisioner-default</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
         </dependency>
@@ -465,6 +472,28 @@
                       </directory>
                       <includes>
                         <include>co.cask.cdap.cdap-operational-stats-core-${project.version}.jar</include>
+                      </includes>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+
+              <!-- Copy provisioner extensions -->
+              <execution>
+                <id>copy-provisioner-default</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration combine.self="override">
+                  <outputDirectory>${stage.provisioners.ext.dir}/default</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>
+                        ${project.parent.basedir}/cdap-provisioner-default/target/
+                      </directory>
+                      <includes>
+                        <include>co.cask.cdap.cdap-provisioner-default-${project.version}.jar</include>
                       </includes>
                     </resource>
                   </resources>

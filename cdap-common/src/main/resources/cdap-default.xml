@@ -2340,6 +2340,16 @@
     </description>
   </property>
 
+  <!-- Provisioner Configuration -->
+
+  <property>
+    <name>provisioner.extensions.dir</name>
+    <value>/opt/cdap/master/ext/provisioners</value>
+    <description>
+      Semicolon-separated list of local directories on the CDAP Master that
+      are scanned for provisioner extensions
+    </description>
+  </property>
 
   <!-- Queue Configuration -->
 

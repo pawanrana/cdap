@@ -420,6 +420,13 @@
           <version>${project.version}</version>
           <scope>provided</scope>
         </dependency>
+        <!-- Add dependencies on provisioner extensions to make sure they are built before standalone -->
+        <dependency>
+          <groupId>co.cask.cdap</groupId>
+          <artifactId>cdap-provisioner-default</artifactId>
+          <version>${project.version}</version>
+          <scope>provided</scope>
+        </dependency>
       </dependencies>
 
       <build>
@@ -605,6 +612,14 @@
                       <targetPath>ext/operations/core</targetPath>
                       <includes>
                         <include>*.sdk.jar</include>
+                      </includes>
+                    </resource>
+                    <!-- copy provisioner extensions -->
+                    <resource>
+                      <directory>${project.parent.basedir}/cdap-provisioner-default/target</directory>
+                      <targetPath>ext/provisioners/default</targetPath>
+                      <includes>
+                        <include>*.jar</include>
                       </includes>
                     </resource>
                   </resources>
