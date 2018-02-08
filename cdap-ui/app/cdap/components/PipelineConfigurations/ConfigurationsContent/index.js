@@ -27,6 +27,9 @@ export default function ConfigurationsContent({isBatch, activeTab, isDetailView}
     case TAB_OPTIONS.PIPELINE_CONFIG:
       ContentToShow = PipelineConfigTabContent;
       break;
+    case TAB_OPTIONS.ENGINE_CONFIG:
+      ContentToShow = EngineConfig;
+      break;
     default:
       // Other tabs will just be empty for now
       ContentToShow = 'div';
