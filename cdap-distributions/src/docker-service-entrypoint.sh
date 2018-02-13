@@ -20,7 +20,7 @@ set -e
 
 export PATH=${PATH}:/opt/cdap/$CDAP_COMPONENT/bin
 
-# Add cdap sandbox start as command if needed
+# Add cdap $CDAP_ROLE start as command if needed
 if [ "${1:0:1}" = '-' ]; then
   set -- service cdap-$CDAP_ROLE start "$@"
 fi
@@ -33,12 +33,16 @@ if [ "${1}" = 'cdap' -a "$(id -u)" = '0' ]; then
   set -- gosu cdap "$@"
 fi
 
-service cdap-$CDAP_ROLE start
+# temp workaround until we get the --foreground working
+#service cdap-$CDAP_ROLE start
 
 # As argument is not related to cdap,
 # then assume that user wants to run his own process,
 # for example a `bash` shell to explore this image
-#exec "$@"
-while true; do
-sleep 1
-done
+echo "$@"
+exec "$@"
+
+# temp hack to keep the container alive.
+#while true; do
+#sleep 1
+#done
