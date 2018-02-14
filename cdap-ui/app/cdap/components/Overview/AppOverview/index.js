@@ -30,6 +30,7 @@ import shortid from 'shortid';
 import T from 'i18n-react';
 import FastActionToMessage from 'services/fast-action-message-helper';
 import capitalize from 'lodash/capitalize';
+import EntityType from 'services/metadata-parser/EntityType';
 
 export default class AppOverview extends Component {
   constructor(props) {
@@ -85,20 +86,16 @@ export default class AppOverview extends Component {
           });
           let datasets = entityDetail.datasets.map(dataset => {
             dataset.entityId = {
-              id: {
-                instanceId: dataset.name
-              },
-              type: 'datasetinstance'
+              dataset: dataset.name,
+              entity: EntityType.dataset
             };
             dataset.uniqueId = shortid.generate();
             return dataset;
           });
           let streams = entityDetail.streams.map(stream => {
             stream.entityId = {
-              id: {
-                streamName: stream.name
-              },
-              type: 'stream'
+              stream: stream.name,
+              entity: EntityType.stream
             };
             stream.uniqueId = shortid.generate();
             return stream;
@@ -148,9 +145,7 @@ export default class AppOverview extends Component {
     let icon = EntityIconMap[artifactName] || EntityIconMap['application'];
     let entityType = [
       'cdap-data-pipeline',
-      'cdap-data-streams',
-      'cdap-batch',
-      'cdap-realtime'
+      'cdap-data-streams'
     ]
       .indexOf(artifactName) !== -1 ? artifactName : 'application';
 

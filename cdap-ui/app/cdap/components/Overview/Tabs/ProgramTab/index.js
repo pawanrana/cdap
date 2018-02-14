@@ -64,6 +64,8 @@ export default class ProgramsTab extends Component {
         .entity
         .programs
         .forEach(program => {
+          console.log('program', program);
+
           let params = {
             namespace,
             appId: program.app,

@@ -82,26 +82,28 @@ export default class HomeListView extends Component {
     }
 
     if (!this.state.loading && !this.state.list.length) {
-      content = <NoEntitiesMessage
-                  searchText={query}
-                  filtersAreApplied={() => activeFilters.length > 0 && activeFilters.length < filterOptions.length}
-                  clearSearchAndFilters={() => {
-                    let searchState = SearchStore.getState().search;
-                    SearchStore.dispatch({
-                      type: SearchStoreActions.SETSORTFILTERSEARCHCURRENTPAGE,
-                      payload: {
-                        query: DEFAULT_SEARCH_QUERY,
-                        activeSort: DEFAULT_SEARCH_SORT_OPTIONS[4],
-                        activeFilters: DEFAULT_SEARCH_FILTERS,
-                        currentPage: 1,
-                        offset: searchState.offset,
-                        overviewEntity: null
-                      }
-                    });
-                    search();
-                    updateQueryString();
-                  }}
-                />;
+      content = (
+        <NoEntitiesMessage
+          searchText={query}
+          filtersAreApplied={() => activeFilters.length > 0 && activeFilters.length < filterOptions.length}
+          clearSearchAndFilters={() => {
+            let searchState = SearchStore.getState().search;
+            SearchStore.dispatch({
+              type: SearchStoreActions.SETSORTFILTERSEARCHCURRENTPAGE,
+              payload: {
+                query: DEFAULT_SEARCH_QUERY,
+                activeSort: DEFAULT_SEARCH_SORT_OPTIONS[4],
+                activeFilters: DEFAULT_SEARCH_FILTERS,
+                currentPage: 1,
+                offset: searchState.offset,
+                overviewEntity: null
+              }
+            });
+            search();
+            updateQueryString();
+          }}
+        />
+      );
 
     }
     if (!this.state.loading && this.state.list.length) {

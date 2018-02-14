@@ -47,7 +47,7 @@
   }
 
   &.datasetinstance {
-    @include generate-color($datasetinstance-entity-header-bg);
+    @include generate-color($dataset-entity-header-bg);
   }
 
   &.stream {

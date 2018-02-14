@@ -94,6 +94,8 @@ export default class ProgramTable extends Component {
       <tbody>
         {
           this.state.entities.map(program => {
+            console.log('progmra', program);
+
             let icon = EntityIconMap[program.programType];
             let statusClass = program.status === 'RUNNING' ? 'text-success' : '';
             return (
