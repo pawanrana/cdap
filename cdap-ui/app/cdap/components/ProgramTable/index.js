@@ -29,38 +29,40 @@ import moment from 'moment';
 import StatusMapper from 'services/StatusMapper';
 require('./ProgramTable.scss');
 
-export default class ProgramTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      entities: []
-    };
-
-    this.tableHeaders = [
-      {
-        property: 'name',
-        label: T.translate('features.ViewSwitch.nameLabel')
-      },
-      {
-        property: 'programType',
-        label: T.translate('features.ViewSwitch.typeLabel')
-      },
-      // have to convert latestRun back from string to seconds from epoch
-      {
-        property: 'latestRun',
-        label: T.translate('features.ViewSwitch.ProgramTable.lastStartedLabel'),
-        sortFunc: (entity) => { return moment(entity.latestRun.start).valueOf(); }
-      },
-      {
-        property: 'status',
-        label: T.translate('features.ViewSwitch.ProgramTable.statusLabel')
-      },
-      // empty header label for Actions column
-      {
-        label: ''
-      }
-    ];
+const tableHeaders = [
+  {
+    property: 'name',
+    label: T.translate('features.ViewSwitch.nameLabel')
+  },
+  {
+    property: 'programType',
+    label: T.translate('features.ViewSwitch.typeLabel')
+  },
+  // have to convert latestRun back from string to seconds from epoch
+  {
+    property: 'latestRun',
+    label: T.translate('features.ViewSwitch.ProgramTable.lastStartedLabel'),
+    sortFunc: (entity) => { return moment(entity.latestRun.start).valueOf(); }
+  },
+  {
+    property: 'status',
+    label: T.translate('features.ViewSwitch.ProgramTable.statusLabel')
+  },
+  // empty header label for Actions column
+  {
+    label: ''
   }
+];
+
+export default class ProgramTable extends Component {
+  static propTypes = {
+    programs: PropTypes.arrayOf(PropTypes.object)
+  };
+
+
+  state = {
+    entities: []
+  };
 
   componentWillMount() {
     let entities = this.updateEntities(this.props.programs);
@@ -89,13 +91,11 @@ export default class ProgramTable extends Component {
     });
   }
 
-  renderTableBody() {
+  renderTableBody = () => {
     return (
       <tbody>
         {
           this.state.entities.map(program => {
-            console.log('progmra', program);
-
             let icon = EntityIconMap[program.programType];
             let statusClass = program.status === 'RUNNING' ? 'text-success' : '';
             return (
@@ -139,14 +139,13 @@ export default class ProgramTable extends Component {
   }
 
   render() {
-
     if (this.state.entities && Array.isArray(this.state.entities)) {
       if (this.state.entities.length) {
         return (
           <div className="program-table">
             <SortableTable
               entities={this.state.entities}
-              tableHeaders={this.tableHeaders}
+              tableHeaders={tableHeaders}
               renderTableBody={this.renderTableBody}
             />
           </div>
@@ -170,6 +169,3 @@ export default class ProgramTable extends Component {
     );
   }
 }
-ProgramTable.propTypes = {
-  programs: PropTypes.arrayOf(PropTypes.object)
-};

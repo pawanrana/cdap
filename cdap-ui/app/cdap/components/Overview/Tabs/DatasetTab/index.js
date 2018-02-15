@@ -55,7 +55,7 @@ export default class DatasetTab extends Component {
   }
   getEntitiesForTable({datasets, streams}) {
     return datasets
-      .map(dataset => Object.assign({}, dataset, {type: 'datasetinstance', id: dataset.name}))
+      .map(dataset => Object.assign({}, dataset, {type: 'dataset', id: dataset.name}))
       .concat(
         streams
         .map(stream => Object.assign({}, stream, {type: 'stream', id: stream.name}))

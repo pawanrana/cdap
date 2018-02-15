@@ -20,6 +20,7 @@ import React from 'react';
 import EntityCard from 'components/EntityCard';
 import {parseMetadata} from 'services/metadata-parser';
 import shortid from 'shortid';
+import EntityType from 'services/metadata-parser/EntityType';
 require('./ProgramCards.scss');
 
 export default function ProgramCards({programs}) {
@@ -30,14 +31,10 @@ export default function ProgramCards({programs}) {
           .map( program => {
             let entity = {
               entityId: {
-                id: {
-                  id: program.name,
-                  application: {
-                    applicationId: program.app
-                  },
-                  type: program.type
-                },
-                type: 'program',
+                application: program.app,
+                program: program.name,
+                type: program.type,
+                entity: EntityType.program
               },
               metadata: {
                 SYSTEM: {}
@@ -47,6 +44,7 @@ export default function ProgramCards({programs}) {
             let uniqueId = shortid.generate();
             entity.uniqueId = uniqueId;
             program.uniqueId = uniqueId;
+
             return (
               <EntityCard
                 className="entity-card-container"
