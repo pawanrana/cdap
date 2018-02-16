@@ -21,6 +21,7 @@ import EngineRadioInput from 'components/PipelineConfigurations/ConfigurationsCo
 import Backpressure from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/Backpressure';
 import NumExecutors from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/NumExecutors';
 import CustomConfig from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/CustomConfig';
+require('./EngineConfigTabContent.scss');
 
 export default class EngineConfigTabContent extends Component {
   static propTypes = {

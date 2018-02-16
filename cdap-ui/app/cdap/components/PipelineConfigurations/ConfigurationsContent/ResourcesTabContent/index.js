@@ -21,6 +21,7 @@ import {getEngineDisplayLabel} from 'components/PipelineConfigurations/Store';
 import DriverResources from 'components/PipelineConfigurations/ConfigurationsContent/ResourcesTabContent/DriverResources';
 import ExecutorResources from 'components/PipelineConfigurations/ConfigurationsContent/ResourcesTabContent/ExecutorResources';
 import ClientResources from 'components/PipelineConfigurations/ConfigurationsContent/ResourcesTabContent/ClientResources';
+require('./ResourcesTabContent.scss');
 
 const mapStateToStepContentHeadingProps = (state, ownProps) => {
   return {
