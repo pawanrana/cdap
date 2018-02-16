@@ -257,7 +257,7 @@ const ConnectedClientResources = connect(
   mapDispatchToClientResourcesProps
 )(ClientResources);
 
-export default function ResourcesConfig({isBatch}) {
+export default function ResourcesTabContent({isBatch}) {
   return (
     <div className="configuration-step-content resources">
       <ConnectedStepContentHeading
@@ -275,6 +275,6 @@ export default function ResourcesConfig({isBatch}) {
   );
 }
 
-ResourcesConfig.propTypes = {
+ResourcesTabContent.propTypes = {
   isBatch: PropTypes.bool
 };

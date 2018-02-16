@@ -18,8 +18,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {TAB_OPTIONS} from 'components/PipelineConfigurations/Store';
 import PipelineConfigTabContent from 'components/PipelineConfigurations/ConfigurationsContent/PipelineConfigTabContent';
-import EngineConfig from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfig';
-import ResourcesConfig from 'components/PipelineConfigurations/ConfigurationsContent/ResourcesConfig';
+import EngineConfigTabContent from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent';
+import ResourcesTabContent from 'components/PipelineConfigurations/ConfigurationsContent/ResourcesTabContent';
 import classnames from 'classnames';
 require('./ConfigurationsContent.scss');
 
@@ -30,10 +30,10 @@ export default function ConfigurationsContent({isBatch, activeTab, isDetailView}
       ContentToShow = PipelineConfigTabContent;
       break;
     case TAB_OPTIONS.ENGINE_CONFIG:
-      ContentToShow = EngineConfig;
+      ContentToShow = EngineConfigTabContent;
       break;
     case TAB_OPTIONS.RESOURCES:
-      ContentToShow = ResourcesConfig;
+      ContentToShow = ResourcesTabContent;
       break;
     default:
       // Other tabs will just be empty for now
