@@ -20,16 +20,12 @@ describe('metadata-parser', () => {
   it('should parse application metadata', () => {
     const applicationMetadata = {
       entityId: {
-        type: 'application',
-        id: {
-          applicationId: 'ApplicationName'
-        }
+        entity: 'APPLICATION',
+        application: 'ApplicationName',
+        version: '-SNAPSHOT'
       },
       metadata: {
         SYSTEM: {
-          properties: {
-            version: '-SNAPSHOT'
-          },
           tags: ['PurchaseHistory']
         }
       }
@@ -46,16 +42,12 @@ describe('metadata-parser', () => {
   it('should detect hydrator pipeline', () => {
     const applicationMetadata = {
       entityId: {
-        type: 'application',
-        id: {
-          applicationId: 'ApplicationName'
-        }
+        entity: 'APPLICATION',
+        application: 'ApplicationName',
+        version: '-SNAPSHOT'
       },
       metadata: {
         SYSTEM: {
-          properties: {
-            version: '-SNAPSHOT'
-          },
           tags: ['cdap-data-pipeline']
         }
       }
@@ -69,31 +61,19 @@ describe('metadata-parser', () => {
   it('should parse artifact metadata', () => {
     const systemArtifactMetadata = {
       entityId: {
-        type: 'artifact',
-        id: {
-          name: 'ArtifactName',
-          version: {
-            version: '1.0.0'
-          },
-          namespace: {
-            id: 'SYSTEM'
-          }
-        }
+        entity: 'ARTIFACT',
+        artifact: 'ArtifactName',
+        namespace: 'SYSTEM',
+        version: '1.0.0'
       }
     };
 
     const userArtifactMetadata = {
       entityId: {
-        type: 'artifact',
-        id: {
-          name: 'ArtifactName',
-          version: {
-            version: '1.0.0'
-          },
-          namespace: {
-            id: 'USER'
-          }
-        }
+        entity: 'ARTIFACT',
+        artifact: 'ArtifactName',
+        namespace: 'USER',
+        version: '1.0.0'
       }
     };
 
@@ -111,10 +91,8 @@ describe('metadata-parser', () => {
   it('should parse dataset metadata', () => {
     const datasetMetadata = {
       entityId: {
-        type: 'datasetinstance',
-        id: {
-          instanceId: 'DatasetName',
-        }
+        entity: 'DATASET',
+        dataset: 'DatasetName'
       }
     };
 
@@ -127,10 +105,8 @@ describe('metadata-parser', () => {
   it('should parse stream metadata', () => {
     const streamMetadata = {
       entityId: {
-        type: 'stream',
-        id: {
-          streamName: 'StreamName',
-        }
+        entity: 'STREAM',
+        stream: 'StreamName'
       }
     };
 
@@ -143,14 +119,10 @@ describe('metadata-parser', () => {
   it('should parse program metadata', () => {
     const programMetadata = {
       entityId: {
-        type: 'program',
-        id: {
-          id: 'ProgramName',
-          type: 'Flow',
-          application: {
-            applicationId: 'SomeApplication'
-          }
-        }
+        entity: 'PROGRAM',
+        program: 'ProgramName',
+        type: 'Flow',
+        application: 'SomeApplication'
       }
     };
 
@@ -165,10 +137,8 @@ describe('metadata-parser', () => {
   it('should parse view metadata', () => {
     const viewMetadata = {
       entityId: {
-        type: 'view',
-        id: {
-          id: 'ViewName',
-        }
+        entity: 'VIEW',
+        view: 'ViewName'
       }
     };
 
